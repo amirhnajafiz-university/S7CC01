@@ -57,8 +57,8 @@ Creating two Golang services to provide the APIs.
       "description": "about ad",
       "email": "sender@gmail.com",
       "status": "progress/failed/successful",
-      "category": "something",
-    },
+      "category": "something"
+    }
   },
   {
     "method": "POST",
@@ -66,8 +66,11 @@ Creating two Golang services to provide the APIs.
     "request body": {
       "description": "about ad",
       "email": "sender@gmail.com",
-      "file": "file object",
+      "file": "file object"
     },
+    "response": {
+      "id": "1"
+    }
   }
 ]
 ```
