@@ -10,8 +10,12 @@ import (
 	"github.com/knadh/koanf/providers/structs"
 )
 
+// Config
+// struct type of app configs.
 type Config struct{}
 
+// Load
+// loading app configs.
 func Load() Config {
 	var instance Config
 
