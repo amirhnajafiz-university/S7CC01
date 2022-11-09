@@ -5,7 +5,8 @@ import (
 	"github.com/ceit-aut/ad-registration-service/pkg/config"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
-	s32 "github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	// s3 connection
-	s3, err := s32.NewSession(cfg.Storage.S3)
+	s, err := s3.NewSession(cfg.Storage.S3)
 	if err != nil {
 		panic(err)
 	}
@@ -46,7 +47,7 @@ func main() {
 	h := handler.Handler{
 		Mongo: mongo,
 		MQTT:  mq,
-		S3:    s3,
+		S3:    s,
 	}
 
 	// start processing

@@ -1,11 +1,12 @@
 package cmd
 
 import (
-	"github.com/ceit-aut/ad-registration-service/internal/api/http"
+	"github.com/ceit-aut/ad-registration-service/internal/api/port/http"
 	"github.com/ceit-aut/ad-registration-service/pkg/config"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
-	s32 "github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/cobra"
 )
@@ -32,7 +33,7 @@ func main() {
 	}
 
 	// s3 connection
-	s3, err := s32.NewSession(cfg.Storage.S3)
+	s, err := s3.NewSession(cfg.Storage.S3)
 	if err != nil {
 		panic(err)
 	}
@@ -47,7 +48,7 @@ func main() {
 	h := http.Handler{
 		Mongo: mongo,
 		MQTT:  mq,
-		S3:    s3,
+		S3:    s,
 	}
 
 	// creating a new fiber app
@@ -58,7 +59,7 @@ func main() {
 	app.Post("/", h.HandlePostRequests)
 
 	// starting fiber
-	if err := app.Listen(":5050"); err != nil {
-		panic(err)
+	if er := app.Listen(":5050"); er != nil {
+		panic(er)
 	}
 }
