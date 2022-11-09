@@ -10,6 +10,7 @@ import (
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/rabbitmq/amqp091-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -29,7 +30,7 @@ func (h *Handler) HandleGetRequests(ctx *fiber.Ctx) error {
 	var (
 		id = ctx.FormValue("id")
 
-		filter = bson.M{"_id": id}
+		filter = bson.M{"id": id}
 		c      = h.Mongo.Collection(model.AdCollection, nil)
 
 		ad model.Ad
@@ -55,6 +56,8 @@ func (h *Handler) HandleGetRequests(ctx *fiber.Ctx) error {
 // after that send the id over rabbitMQ.
 func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 	var (
+		uid = uuid.New().String()
+
 		c = h.Mongo.Collection(model.AdCollection, nil)
 
 		email       = ctx.FormValue("email")
@@ -74,7 +77,7 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 	uploader := s3manager.NewUploader(h.S3.Session)
 	up, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(h.S3.Bucket),
-		Key:    aws.String("file"),
+		Key:    aws.String(uid),
 		Body:   file,
 	})
 	if err != nil {
@@ -82,6 +85,7 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 	}
 
 	ad := model.Ad{
+		Id:          uid,
 		Email:       email,
 		Description: description,
 		State:       enum.PendingState,
@@ -89,8 +93,7 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 		Image:       up.UploadID,
 	}
 
-	id, err := c.InsertOne(ctx.Context(), ad, nil)
-	if err != nil {
+	if _, err = c.InsertOne(ctx.Context(), ad, nil); err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
@@ -102,12 +105,12 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 		false,
 		amqp091.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(id.InsertedID.(string)),
+			Body:        []byte(uid),
 		},
 	)
 	if err != nil {
 		return ctx.SendStatus(http.StatusBadGateway)
 	}
 
-	return ctx.SendString(id.InsertedID.(string))
+	return ctx.SendString(uid)
 }
