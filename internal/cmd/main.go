@@ -3,6 +3,7 @@ package cmd
 import (
 	api "github.com/ceit-aut/ad-registration-service/internal/api/cmd"
 	processor "github.com/ceit-aut/ad-registration-service/internal/processor/cmd"
+
 	"github.com/spf13/cobra"
 )
 
