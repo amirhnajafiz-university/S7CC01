@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -9,6 +10,7 @@ import (
 // manages to handle http endpoints.
 type Handler struct {
 	Mongo *mongo.Database
+	S3    *session.Session
 }
 
 // HandleGetRequests
