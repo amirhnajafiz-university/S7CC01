@@ -4,6 +4,7 @@ import (
 	"github.com/ceit-aut/ad-registration-service/internal/processor/handler"
 	"github.com/ceit-aut/ad-registration-service/pkg/config"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/service/imagga"
 	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
@@ -47,12 +48,16 @@ func main() {
 	// mailgun connection
 	ma := mail.NewConnection(cfg.Mailgun)
 
+	// imagga handler
+	im := &imagga.Imagga{Cfg: cfg.Imagga}
+
 	// creating a new handler
 	h := handler.Handler{
-		Mongo: mongo,
-		Mail:  ma,
-		MQTT:  mq,
-		S3:    s,
+		Imagga: im,
+		Mongo:  mongo,
+		Mail:   ma,
+		MQTT:   mq,
+		S3:     s,
 	}
 
 	// start processing

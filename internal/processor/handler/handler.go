@@ -2,8 +2,10 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"log"
 
+	"github.com/ceit-aut/ad-registration-service/pkg/enum"
 	"github.com/ceit-aut/ad-registration-service/pkg/model"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/ceit-aut/ad-registration-service/pkg/service/imagga"
@@ -62,16 +64,39 @@ func (h *Handler) Handle() {
 			continue
 		}
 
-		// todo
+		// image tag
 		resp, err := h.Imagga.Process("")
 		if err != nil {
 			log.Println(err)
 
 			continue
 		}
-		// updating ad status and category
-		// sending email if valid
 
+		// response check
+		if len(resp.Result.Tags) > 0 {
+			if resp.Result.Tags[0].Confidence == 100 {
+				ad.Category = resp.Result.Tags[0].Tag.En
+				ad.State = enum.AcceptState
+
+				// send email
+				go func() {
+					msg := fmt.Sprintf(
+						"Dear '%s', your ad about \"%s\", registered sucessfully.",
+						ad.Email,
+						ad.Description,
+					)
+					if err := h.Mail.Send(msg, "ad-status", ad.Email); err != nil {
+						log.Println(err)
+					}
+				}()
+			} else {
+				ad.State = enum.RejectState
+			}
+		} else {
+			ad.State = enum.RejectState
+		}
+
+		// update mongodb
 		if _, err := c.UpdateOne(ctx, filter, ad, nil); err != nil {
 			log.Println(err)
 

@@ -3,7 +3,7 @@ package imagga
 type Response struct {
 	Result struct {
 		Tags []struct {
-			Confidence string `json:"confidence"`
+			Confidence uint `json:"confidence"`
 			Tag        struct {
 				En string `json:"en"`
 			} `json:"tag"`
