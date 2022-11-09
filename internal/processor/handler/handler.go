@@ -6,6 +6,7 @@ import (
 
 	"github.com/ceit-aut/ad-registration-service/pkg/model"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -16,6 +17,7 @@ import (
 // manages to handle the processor service.
 type Handler struct {
 	Mongo *mongo.Database
+	Mail  *mail.Mailgun
 	MQTT  *mqtt.MQTT
 	S3    *s3.S3
 }

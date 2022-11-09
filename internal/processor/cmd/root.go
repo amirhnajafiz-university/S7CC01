@@ -4,6 +4,7 @@ import (
 	"github.com/ceit-aut/ad-registration-service/internal/processor/handler"
 	"github.com/ceit-aut/ad-registration-service/pkg/config"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 
@@ -43,9 +44,13 @@ func main() {
 		panic(err)
 	}
 
+	// mailgun connection
+	ma := mail.NewConnection(cfg.Mailgun)
+
 	// creating a new handler
 	h := handler.Handler{
 		Mongo: mongo,
+		Mail:  ma,
 		MQTT:  mq,
 		S3:    s,
 	}
