@@ -4,7 +4,7 @@ Ad Registration Service
 
 Cloud computing first project/homework. In this project we are going to create a **Ad Registration Service**. We are building two Backend services for getting user information and processing the next steps.
 
-## First API
+## First API (api)
 
 In first API we are going to get all of our clients information about an Ad. This information consists of:
 
@@ -23,7 +23,7 @@ In this API we need to return the information of each Ad. The schema is like thi
 +----------+----------------------+----------------+----------------+-------------------+
 ```
 
-## Second API
+## Second API (processor)
 
 In this API we need to process the Ad. We need to subscribe over RabbitMQ Cluster to 
 receive events from first API. After that we are going to get Image from S3 cluster and 
