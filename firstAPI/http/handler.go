@@ -4,17 +4,12 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/ceit-aut/ad-registration-service/firstAPI/model"
-	"github.com/ceit-aut/ad-registration-service/firstAPI/port/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/enum"
+	"github.com/ceit-aut/ad-registration-service/pkg/model"
+	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-)
-
-const (
-	pendingState = "pending"
-	rejectState  = "rejected"
-	acceptState  = "accepted"
 )
 
 // Handler
@@ -43,10 +38,10 @@ func (h *Handler) HandleGetRequests(ctx *fiber.Ctx) error {
 	}
 
 	switch ad.State {
-	case pendingState:
-		return ctx.SendString(pendingState)
-	case rejectState:
-		return ctx.SendString(rejectState)
+	case enum.PendingState:
+		return ctx.SendString(enum.PendingState)
+	case enum.RejectState:
+		return ctx.SendString(enum.RejectState)
 	}
 
 	return ctx.JSON(ad)
