@@ -1,15 +1,12 @@
 package cmd
 
 import (
-	"context"
-
+	"github.com/ceit-aut/ad-registration-service/internal/processor/handler"
 	"github.com/ceit-aut/ad-registration-service/pkg/config"
-	"github.com/ceit-aut/ad-registration-service/pkg/model"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
 	s32 "github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 	"github.com/spf13/cobra"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func GetCommand() *cobra.Command {
@@ -34,7 +31,7 @@ func main() {
 	}
 
 	// s3 connection
-	_, err = s32.NewSession(cfg.Storage.S3)
+	s3, err := s32.NewSession(cfg.Storage.S3)
 	if err != nil {
 		panic(err)
 	}
@@ -45,42 +42,13 @@ func main() {
 		panic(err)
 	}
 
-	events, _ := mq.Channel.Consume(
-		mq.Queue,
-		"",    // consumer
-		true,  // auto-ack
-		false, // exclusive
-		false, // no-local
-		false, // no-wait
-		nil,   // args
-	)
-
-	for event := range events {
-		var (
-			ctx = context.Background()
-
-			// get id from rabbitMQ
-			id = string(event.Body)
-
-			filter = bson.M{"id": id}
-
-			c = mongo.Collection(model.AdCollection)
-
-			ad model.Ad
-		)
-
-		value := c.FindOne(ctx, filter, nil)
-		if err := value.Decode(&ad); err != nil {
-			continue
-		}
-
-		// todo
-		// calling imagga
-		// updating ad status and category
-		// sending email if valid
-
-		if _, err := c.UpdateOne(ctx, filter, ad, nil); err != nil {
-			continue
-		}
+	// creating a new handler
+	h := handler.Handler{
+		Mongo: mongo,
+		MQTT:  mq,
+		S3:    s3,
 	}
+
+	// start processing
+	h.Handle()
 }
