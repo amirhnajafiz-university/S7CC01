@@ -1,8 +1,8 @@
 package imagga
 
 // Config
-// contains parameters for Imagga service.
+// contains all information for connecting to imagga.
 type Config struct {
-	Enabled bool   `koanf:"enabled"`
-	URI     string `koanf:"uri"`
+	ApiKey    string `koanf:"api_key"`
+	ApiSecret string `koanf:"api_secret"`
 }
