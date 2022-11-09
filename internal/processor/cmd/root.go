@@ -1,15 +1,18 @@
 package cmd
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/spf13/cobra"
 
-// Execute
-// main method of application.
-func Execute() {
-	// creating a new fiber app
-	app := fiber.New()
-
-	// starting fiber
-	if err := app.Listen(":5050"); err != nil {
-		panic(err)
+func GetCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:  "processor",
+		Long: "starting the processor service",
+		Run: func(_ *cobra.Command, _ []string) {
+			main()
+		},
 	}
+}
+
+// main method of processor.
+func main() {
+	// todo processor logic
 }
