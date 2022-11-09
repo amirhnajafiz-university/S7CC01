@@ -11,14 +11,19 @@ require (
 	github.com/gofiber/fiber/v2 v2.38.1 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
+	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/knadh/koanf v1.4.3 // indirect
 	github.com/mailgun/mailgun-go v2.0.0+incompatible // indirect
+	github.com/mailgun/mailgun-go/v4 v4.8.1 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rabbitmq/amqp091-go v1.5.0 // indirect

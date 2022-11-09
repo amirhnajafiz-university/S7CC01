@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage"
 
 	"github.com/knadh/koanf"
@@ -16,6 +17,7 @@ import (
 // Config
 // struct type of app configs.
 type Config struct {
+	Mailgun mail.Config    `koanf:"mailgun"`
 	MQTT    mqtt.Config    `koanf:"mqtt"`
 	Storage storage.Config `koanf:"storage"`
 }
