@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/ceit-aut/ad-registration-service/firstAPI/port/mqtt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -10,6 +11,7 @@ import (
 // manages to handle http endpoints.
 type Handler struct {
 	Mongo *mongo.Database
+	MQTT  *mqtt.MQTT
 	S3    *session.Session
 }
 
