@@ -1,0 +1,19 @@
+imagga:
+  api_key: ""
+  api_secret: ""
+mailgun:
+  api_key: ""
+  domain: ""
+mqtt:
+  queue: "ad-reg-queue"
+  uri: ""
+storage:
+  mongodb:
+    database: "ad-reg"
+    uri: ""
+  s3:
+    accessKeyID: ""
+    secretAccessKey: ""
+    region: ""
+    bucket: "ad-reg-bucket"
+    endpoint: ""

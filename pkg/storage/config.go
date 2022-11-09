@@ -7,5 +7,5 @@ import (
 
 type Config struct {
 	Mongo mongodb.Config `koanf:"mongodb"`
-	S3    s3.Config      `koanf:"amazon"`
+	S3    s3.Config      `koanf:"s3"`
 }
