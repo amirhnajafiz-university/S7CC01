@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/ceit-aut/ad-registration-service/firstAPI/port/mqtt"
+	"github.com/ceit-aut/ad-registration-service/firstAPI/storage"
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
@@ -12,7 +14,10 @@ import (
 
 // Config
 // struct type of app configs.
-type Config struct{}
+type Config struct {
+	MQTT    mqtt.Config    `koanf:"mqtt"`
+	Storage storage.Config `koanf:"storage"`
+}
 
 // Load
 // loading app configs.
