@@ -24,6 +24,7 @@ func NewSession(cfg Config) (*S3, error) {
 				cfg.SecretAccessKey,
 				"",
 			),
+			Endpoint: &cfg.Endpoint,
 		},
 	)
 	if err != nil {

@@ -7,4 +7,5 @@ type Config struct {
 	SecretAccessKey string `koanf:"secretAccessKey"`
 	Region          string `koanf:"region"`
 	Bucket          string `koanf:"bucket"`
+	Endpoint        string `koanf:"endpoint"`
 }

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ceit-aut/ad-registration-service/pkg/port/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage"
+
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
