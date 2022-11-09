@@ -6,10 +6,17 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
+type S3 struct {
+	Bucket  string
+	Session *session.Session
+}
+
 // NewSession
 // will create a new s3 session.
-func NewSession(cfg Config) (*session.Session, error) {
-	return session.NewSession(
+func NewSession(cfg Config) (*S3, error) {
+	var s3 S3
+
+	newSession, err := session.NewSession(
 		&aws.Config{
 			Region: aws.String(cfg.Region),
 			Credentials: credentials.NewStaticCredentials(
@@ -19,4 +26,12 @@ func NewSession(cfg Config) (*session.Session, error) {
 			),
 		},
 	)
+	if err != nil {
+		return nil, err
+	}
+
+	s3.Session = newSession
+	s3.Bucket = cfg.Bucket
+
+	return &s3, nil
 }

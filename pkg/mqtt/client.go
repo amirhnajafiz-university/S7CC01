@@ -10,7 +10,7 @@ import (
 // contains queue and channel of rabbitMQ.
 type MQTT struct {
 	Channel *amqp091.Channel
-	Queue   amqp091.Queue
+	Queue   string
 }
 
 // NewConnection
@@ -28,7 +28,7 @@ func NewConnection(cfg Config) (*MQTT, error) {
 		return nil, fmt.Errorf("getting rabbitMQ channel failed: %w", err)
 	}
 
-	mq.Queue, err = mq.Channel.QueueDeclare(
+	q, err := mq.Channel.QueueDeclare(
 		cfg.Queue, // name
 		false,     // durable
 		false,     // delete when unused
@@ -39,6 +39,8 @@ func NewConnection(cfg Config) (*MQTT, error) {
 	if err != nil {
 		return nil, fmt.Errorf("creating queue failed: %w", err)
 	}
+
+	mq.Queue = q.Name
 
 	return &mq, nil
 }
