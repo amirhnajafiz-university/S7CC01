@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 // Imagga
@@ -15,10 +16,14 @@ type Imagga struct {
 
 // Process
 // sends one http request to Imagga website.
-func (i *Imagga) Process(url string) (*Response, error) {
+func (i *Imagga) Process(address string) (*Response, error) {
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("GET", "https://api.imagga.com/v2/tags?image_url="+url, nil)
+	req, _ := http.NewRequest(
+		"GET",
+		"https://api.imagga.com/v2/tags?image_url="+url.QueryEscape(address),
+		nil,
+	)
 	req.SetBasicAuth(i.Cfg.ApiKey, i.Cfg.ApiSecret)
 
 	resp, err := client.Do(req)

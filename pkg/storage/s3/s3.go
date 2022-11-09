@@ -7,7 +7,7 @@ import (
 )
 
 type S3 struct {
-	Bucket  string
+	Cfg     Config
 	Session *session.Session
 }
 
@@ -32,7 +32,7 @@ func NewSession(cfg Config) (*S3, error) {
 	}
 
 	s3.Session = newSession
-	s3.Bucket = cfg.Bucket
+	s3.Cfg = cfg
 
 	return &s3, nil
 }

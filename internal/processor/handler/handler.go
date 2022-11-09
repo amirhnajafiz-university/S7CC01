@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/ceit-aut/ad-registration-service/pkg/enum"
 	"github.com/ceit-aut/ad-registration-service/pkg/model"
@@ -12,6 +13,8 @@ import (
 	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 
+	"github.com/aws/aws-sdk-go/aws"
+	s3Sdk "github.com/aws/aws-sdk-go/service/s3"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -64,8 +67,26 @@ func (h *Handler) Handle() {
 			continue
 		}
 
+		// getting the image from s3
+		svc := s3Sdk.New(h.S3.Session, &aws.Config{
+			Region:   aws.String(h.S3.Cfg.Region),
+			Endpoint: aws.String(h.S3.Cfg.Endpoint),
+		})
+
+		req, _ := svc.GetObjectRequest(&s3Sdk.GetObjectInput{
+			Bucket: aws.String(h.S3.Cfg.Bucket),
+			Key:    aws.String(ad.Id),
+		})
+
+		urlStr, err := req.Presign(15 * time.Minute)
+		if err != nil {
+			log.Println(err)
+
+			continue
+		}
+
 		// image tag
-		resp, err := h.Imagga.Process("")
+		resp, err := h.Imagga.Process(urlStr)
 		if err != nil {
 			log.Println(err)
 

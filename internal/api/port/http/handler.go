@@ -3,6 +3,7 @@ package http
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/ceit-aut/ad-registration-service/pkg/enum"
 	"github.com/ceit-aut/ad-registration-service/pkg/model"
@@ -10,6 +11,7 @@ import (
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 
 	"github.com/aws/aws-sdk-go/aws"
+	s3Sdk "github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -54,9 +56,29 @@ func (h *Handler) HandleGetRequests(ctx *fiber.Ctx) error {
 		return ctx.SendString(enum.PendingState)
 	case enum.RejectState:
 		return ctx.SendString(enum.RejectState)
-	default:
-		return ctx.JSON(ad)
 	}
+
+	// getting the image
+	svc := s3Sdk.New(h.S3.Session, &aws.Config{
+		Region:   aws.String(h.S3.Cfg.Region),
+		Endpoint: aws.String(h.S3.Cfg.Endpoint),
+	})
+
+	req, _ := svc.GetObjectRequest(&s3Sdk.GetObjectInput{
+		Bucket: aws.String(h.S3.Cfg.Bucket),
+		Key:    aws.String(ad.Id),
+	})
+
+	urlStr, err := req.Presign(15 * time.Minute)
+	if err != nil {
+		log.Println(err)
+
+		return ctx.SendStatus(http.StatusInternalServerError)
+	}
+
+	ad.Image = urlStr
+
+	return ctx.JSON(ad)
 }
 
 // HandlePostRequests
@@ -92,8 +114,8 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 	// creating a new uploader
 	uploader := s3manager.NewUploader(h.S3.Session)
 	// upload image into s3 database
-	up, err := uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(h.S3.Bucket),
+	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(h.S3.Cfg.Bucket),
 		Key:    aws.String(uid),
 		Body:   file,
 	})
@@ -110,7 +132,7 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 		Description: description,
 		State:       enum.PendingState,
 		Category:    "",
-		Image:       up.UploadID,
+		Image:       "",
 	}
 
 	// insert ad into mongodb
