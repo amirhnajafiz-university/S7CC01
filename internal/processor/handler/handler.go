@@ -6,6 +6,7 @@ import (
 
 	"github.com/ceit-aut/ad-registration-service/pkg/model"
 	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
+	"github.com/ceit-aut/ad-registration-service/pkg/service/imagga"
 	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
 	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
 
@@ -16,10 +17,11 @@ import (
 // Handler
 // manages to handle the processor service.
 type Handler struct {
-	Mongo *mongo.Database
-	Mail  *mail.Mailgun
-	MQTT  *mqtt.MQTT
-	S3    *s3.S3
+	Imagga *imagga.Imagga
+	Mongo  *mongo.Database
+	Mail   *mail.Mailgun
+	MQTT   *mqtt.MQTT
+	S3     *s3.S3
 }
 
 // Handle
@@ -61,7 +63,12 @@ func (h *Handler) Handle() {
 		}
 
 		// todo
-		// calling imagga
+		resp, err := h.Imagga.Process("")
+		if err != nil {
+			log.Println(err)
+
+			continue
+		}
 		// updating ad status and category
 		// sending email if valid
 
