@@ -58,7 +58,7 @@ func (h *Handler) HandleGetRequests(ctx *fiber.Ctx) error {
 		return ctx.SendString(enum.RejectState)
 	}
 
-	// getting the image
+	// getting the image from s3
 	svc := s3Sdk.New(h.S3.Session, &aws.Config{
 		Region:   aws.String(h.S3.Cfg.Region),
 		Endpoint: aws.String(h.S3.Cfg.Endpoint),

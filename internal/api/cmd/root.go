@@ -14,8 +14,8 @@ import (
 func GetCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:  "api",
-		Long: "command for starting the api service",
-		Run: func(_ *cobra.Command, args []string) {
+		Long: "starting the api service",
+		Run: func(_ *cobra.Command, _ []string) {
 			main()
 		},
 	}

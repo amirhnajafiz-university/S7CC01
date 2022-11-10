@@ -109,6 +109,8 @@ func (h *Handler) Handle() {
 					if err := h.Mail.Send(msg, "ad-status", ad.Email); err != nil {
 						log.Println(err)
 					}
+
+					log.Printf("email send {id: %s}\n", id)
 				}()
 			} else {
 				ad.State = enum.RejectState
@@ -124,6 +126,6 @@ func (h *Handler) Handle() {
 			continue
 		}
 
-		log.Printf("success processing {id: %s}", id)
+		log.Printf("success processing {id: %s}\n", id)
 	}
 }
