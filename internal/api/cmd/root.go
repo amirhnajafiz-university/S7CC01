@@ -55,8 +55,8 @@ func main() {
 	app := fiber.New()
 
 	// declaring endpoints
-	app.Get("/{id}", h.HandleGetRequests)
-	app.Post("/", h.HandlePostRequests)
+	app.Get("api/{id}", h.HandleGetRequests)
+	app.Post("api/", h.HandlePostRequests)
 
 	// starting fiber
 	if er := app.Listen(":5050"); er != nil {

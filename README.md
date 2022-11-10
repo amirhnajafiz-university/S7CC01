@@ -39,11 +39,9 @@ the suggested tags and stores them inside our MongoDB. If the Ad was valid, it w
 - Image tagging service, which we are going to use [Imagga](https://imagga.com/).
 - Mail service, which we are going to use [Mailgun](https://www.mailgun.com/).
 
-## API routes
+## API Information
 
-Creating two Golang services to provide the APIs.
-
-### First API
+Creating two Golang services to provide the APIs. (```localhost:5050```)
 
 #### Routes
 
@@ -57,13 +55,14 @@ Creating two Golang services to provide the APIs.
       "description": "about ad",
       "email": "sender@gmail.com",
       "status": "progress/failed/successful",
-      "category": "something"
+      "category": "something",
+      "image": "image link"
     }
   },
   {
     "method": "POST",
     "uri": "api/",
-    "request body": {
+    "multipart form body": {
       "description": "about ad",
       "email": "sender@gmail.com",
       "file": "file object"
@@ -78,36 +77,23 @@ Creating two Golang services to provide the APIs.
 #### Configs
 
 ```yaml
-port: 5000
-db:
-  mong:
-    url: "address to mongo cluster"
-  s3:
-    url: "address to S3"
-    token: "S3 auth token"
-rabbit:
-  url: "rabbit url"
-```
-
-### Second API
-
-This API job is to listen on RabbitMQ and process the Ads.
-
-#### Configs
-
-```yaml
-port: 10251
-mail:
-  address: "mailgun service address"
-  token: "api token"
-db:
-  mong:
-    url: "address to mongo cluster"
-  s3:
-    url: "address to S3"
-    token: "S3 auth token"
-rabbit:
-  url: "rabbit url"
 imagga:
-  url: "immage url"
+  api_key: ""
+  api_secret: ""
+mailgun:
+  api_key: ""
+  domain: ""
+mqtt:
+  queue: "ad-reg-queue"
+  uri: ""
+storage:
+  mongodb:
+    database: "ad-reg"
+    uri: ""
+  s3:
+    accessKeyID: ""
+    secretAccessKey: ""
+    region: ""
+    bucket: "ad-reg-bucket"
+    endpoint: ""
 ```
