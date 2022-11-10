@@ -2,7 +2,6 @@ package imagga
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -36,7 +35,7 @@ func (i *Imagga) Process(address string) (*Response, error) {
 	var response Response
 
 	if err := json.Unmarshal(respBody, &response); err != nil {
-		fmt.Println("Can not unmarshal JSON")
+		return nil, err
 	}
 
 	return &response, nil

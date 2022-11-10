@@ -13,12 +13,30 @@ import (
 // loading default configs.
 func Default() Config {
 	return Config{
-		Imagga:  imagga.Config{},
-		Mailgun: mail.Config{},
-		MQTT:    mqtt.Config{},
+		Imagga: imagga.Config{
+			ApiKey:    "",
+			ApiSecret: "",
+		},
+		Mailgun: mail.Config{
+			Domain: "",
+			APIKEY: "",
+		},
+		MQTT: mqtt.Config{
+			Queue: "",
+			URI:   "",
+		},
 		Storage: storage.Config{
-			Mongo: mongodb.Config{},
-			S3:    s3.Config{},
+			Mongo: mongodb.Config{
+				Database: "",
+				URI:      "",
+			},
+			S3: s3.Config{
+				AccessKeyID:     "",
+				SecretAccessKey: "",
+				Region:          "",
+				Bucket:          "",
+				Endpoint:        "",
+			},
 		},
 	}
 }
