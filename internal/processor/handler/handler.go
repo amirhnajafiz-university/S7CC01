@@ -112,25 +112,31 @@ func (h *Handler) Handle() {
 
 		// response check
 		if len(resp.Result.Tags) > 0 {
-			log.Printf("imagga response confidence: %f\n", resp.Result.Tags[0].Confidence)
+			if validateTag(resp) {
+				log.Printf("imagga response confidence: %f\n", resp.Result.Tags[0].Confidence)
 
-			if resp.Result.Tags[0].Confidence == 100 {
-				ad.Category = resp.Result.Tags[0].Tag.En
-				ad.State = enum.AcceptState
+				if resp.Result.Tags[0].Confidence > 50 {
+					ad.Category = resp.Result.Tags[0].Tag.En
+					ad.State = enum.AcceptState
 
-				// send email
-				go func() {
-					msg := fmt.Sprintf(
-						"Dear '%s', your ad about \"%s\", registered sucessfully.",
-						ad.Email,
-						ad.Description,
-					)
-					if err := h.Mail.Send(msg, "ad-status", ad.Email); err != nil {
-						log.Println(err)
-					}
+					// send email
+					go func() {
+						msg := fmt.Sprintf(
+							"Dear '%s', your ad about \"%s\", registered sucessfully.",
+							ad.Email,
+							ad.Description,
+						)
+						if err := h.Mail.Send(msg, "ad-status", ad.Email); err != nil {
+							log.Println(err)
 
-					log.Printf("email send {id: %s}\n", id)
-				}()
+							return
+						}
+
+						log.Printf("email send {id: %s}\n", id)
+					}()
+				} else {
+					ad.State = enum.RejectState
+				}
 			} else {
 				ad.State = enum.RejectState
 			}
@@ -160,4 +166,16 @@ func (h *Handler) Handle() {
 
 		log.Printf("success processing:\n\t{id: %s}\n", id)
 	}
+}
+
+// validateTag
+// will check the vehicle validation of that image.
+func validateTag(response *imagga.Response) bool {
+	for _, item := range response.Result.Tags {
+		if item.Tag.En == "vehicle" {
+			return true
+		}
+	}
+
+	return false
 }
