@@ -55,7 +55,7 @@ func main() {
 	app := fiber.New()
 
 	// declaring endpoints
-	app.Get("api/{id}", h.HandleGetRequests)
+	app.Get("api/:id", h.HandleGetRequests)
 	app.Post("api/", h.HandlePostRequests)
 
 	// starting fiber

@@ -13,8 +13,15 @@ import (
 func NewConnection(cfg Config) (*mongo.Database, error) {
 	// mongodb server options
 	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	mongoURI := cfg.Local
+
+	// check to see if we need to connect to local or atlas
+	if cfg.Enable {
+		mongoURI = cfg.URI
+	}
+
 	clientOptions := options.Client().
-		ApplyURI(cfg.URI).
+		ApplyURI(mongoURI).
 		SetServerAPIOptions(serverAPIOptions)
 
 	// creating mongodb client

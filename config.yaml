@@ -11,6 +11,8 @@ storage:
   mongodb:
     database: "ad-db"
     uri: "mongodb+srv://m001-student:my-superpass2@amirh.aoxrj.mongodb.net/?retryWrites=true&w=majority"
+    enable: "false"
+    local: "mongodb://127.0.0.1:27017/"
   s3:
     accessKeyID: "c4af0564-e32f-4a10-9925-f2157f51d7b9"
     secretAccessKey: "f0a091b2eadcccbb329ad782fd754eeba2c36398db8a970e8cb0e070d7e745b6"

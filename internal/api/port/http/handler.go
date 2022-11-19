@@ -33,7 +33,7 @@ type Handler struct {
 func (h *Handler) HandleGetRequests(ctx *fiber.Ctx) error {
 	var (
 		// get ad id from form request
-		id = ctx.FormValue("id")
+		id = ctx.Params("id")
 		// creating a filter for mongodb
 		filter = bson.M{"id": id}
 		// connecting to mongodb collection
