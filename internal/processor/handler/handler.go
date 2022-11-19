@@ -44,6 +44,8 @@ func (h *Handler) Handle() {
 		nil,   // args
 	)
 
+	log.Println("processor started ...")
+
 	// listen over rabbitMQ events
 	for event := range events {
 		var (
@@ -59,6 +61,8 @@ func (h *Handler) Handle() {
 			ad model.Ad
 		)
 
+		log.Printf("receive id: %s\n", id)
+
 		// finding the ad
 		value := c.FindOne(ctx, filter, nil)
 		if err := value.Decode(&ad); err != nil {
@@ -66,6 +70,8 @@ func (h *Handler) Handle() {
 
 			continue
 		}
+
+		log.Println("mongodb get by id succeed")
 
 		// getting the image from s3
 		svc := s3Sdk.New(h.S3.Session, &aws.Config{
@@ -84,6 +90,8 @@ func (h *Handler) Handle() {
 
 			continue
 		}
+
+		log.Println("s3 link generated")
 
 		// image tag
 		resp, err := h.Imagga.Process(urlStr)
@@ -118,6 +126,8 @@ func (h *Handler) Handle() {
 		} else {
 			ad.State = enum.RejectState
 		}
+
+		log.Println("imagga api call succeed")
 
 		// update mongodb
 		if _, err := c.UpdateOne(ctx, filter, ad, nil); err != nil {
