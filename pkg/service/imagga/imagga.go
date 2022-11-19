@@ -8,7 +8,6 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
-	"net/url"
 	"os"
 )
 
@@ -20,14 +19,14 @@ type Imagga struct {
 
 // Process
 // sends one http request to Imagga website.
-func (i *Imagga) Process(address string) (*Response, error) {
+func (i *Imagga) Process(address string) (*TagResponse, error) {
 	// creating a new client
 	client := &http.Client{}
 
 	// creating a new get request
 	req, _ := http.NewRequest(
 		"GET",
-		"https://api.imagga.com/v2/tags?image_url="+url.QueryEscape(address),
+		"https://api.imagga.com/v2/tags?image_upload_id="+address,
 		nil,
 	)
 	// set the auth
@@ -44,7 +43,7 @@ func (i *Imagga) Process(address string) (*Response, error) {
 	// return response
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
-	var response Response
+	var response TagResponse
 
 	if resp.StatusCode != http.StatusOK {
 		log.Printf("imagga response: %s\n", resp.Status)
@@ -91,11 +90,11 @@ func readFile(filePath string) (*bytes.Buffer, *multipart.Writer, error) {
 
 // Upload
 // files to imagga service and get url.
-func (i *Imagga) Upload(filePath string) (string, error) {
+func (i *Imagga) Upload(filePath string) (*UploadResponse, error) {
 	// reading the file
 	body, writer, err := readFile(filePath)
 	if err != nil {
-		return "", fmt.Errorf("failed to read file: %w", err)
+		return nil, fmt.Errorf("failed to read file: %w", err)
 	}
 
 	// creating a new http client
@@ -115,15 +114,21 @@ func (i *Imagga) Upload(filePath string) (string, error) {
 	// make http call
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// return response
 	respBody, _ := ioutil.ReadAll(resp.Body)
 
+	var response UploadResponse
+
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("request failed: %s", string(respBody))
+		return nil, fmt.Errorf("request failed: %s", string(respBody))
+	} else {
+		if err := json.Unmarshal(respBody, &response); err != nil {
+			return nil, err
+		}
 	}
 
-	return string(respBody), nil
+	return &response, nil
 }
