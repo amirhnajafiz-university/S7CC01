@@ -69,7 +69,7 @@ func (h *Handler) Handle() {
 			ad model.Ad
 		)
 
-		log.Printf("receive id: %s\n", id)
+		log.Printf("receive id:\n\t%s\n", id)
 
 		// finding the ad
 		value := c.FindOne(ctx, filter, nil)
