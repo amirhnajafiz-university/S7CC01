@@ -3,6 +3,7 @@ package imagga
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -25,6 +26,8 @@ func (i *Imagga) Process(address string) (*Response, error) {
 	)
 	req.SetBasicAuth(i.Cfg.ApiKey, i.Cfg.ApiSecret)
 
+	log.Printf("sending request to imagga:\n\t%s\n", req.URL)
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -34,8 +37,13 @@ func (i *Imagga) Process(address string) (*Response, error) {
 
 	var response Response
 
-	if err := json.Unmarshal(respBody, &response); err != nil {
-		return nil, err
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("imagga response: %s\n", resp.Status)
+		log.Printf("\t%s\n", string(respBody))
+	} else {
+		if err := json.Unmarshal(respBody, &response); err != nil {
+			return nil, err
+		}
 	}
 
 	return &response, nil

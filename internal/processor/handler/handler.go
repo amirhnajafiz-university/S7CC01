@@ -99,7 +99,7 @@ func (h *Handler) Handle() {
 			continue
 		}
 
-		log.Printf("s3 link generated: %s\n", urlStr)
+		log.Printf("s3 link generated:\n\t%s\n", urlStr)
 
 		// image tag
 		resp, err := h.Imagga.Process(urlStr)
@@ -109,8 +109,12 @@ func (h *Handler) Handle() {
 			continue
 		}
 
+		log.Printf("imagga response:\n\t%d tags\n", len(resp.Result.Tags))
+
 		// response check
 		if len(resp.Result.Tags) > 0 {
+			log.Printf("imagga response confidence: %d\n", resp.Result.Tags[0].Confidence)
+
 			if resp.Result.Tags[0].Confidence == 100 {
 				ad.Category = resp.Result.Tags[0].Tag.En
 				ad.State = enum.AcceptState
@@ -135,9 +139,18 @@ func (h *Handler) Handle() {
 			ad.State = enum.RejectState
 		}
 
-		log.Println("imagga api call succeed")
+		log.Printf("imagga api call succeed")
 
-		update := bson.D{{"$set", bson.D{{"state", ad.State}, {"category", ad.Category}}}}
+		// update filter for mongodb
+		update := bson.D{
+			{
+				"$set",
+				bson.D{
+					{"state", ad.State},
+					{"category", ad.Category},
+				},
+			},
+		}
 
 		// update mongodb
 		if _, err := c.UpdateOne(ctx, filter, update, nil); err != nil {
