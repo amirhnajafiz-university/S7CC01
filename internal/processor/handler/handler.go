@@ -34,7 +34,7 @@ type Handler struct {
 // the input images.
 func (h *Handler) Handle() {
 	// creating a consumer for rabbitMQ
-	events, _ := h.MQTT.Channel.Consume(
+	events, err := h.MQTT.Channel.Consume(
 		h.MQTT.Queue,
 		"",    // consumer
 		true,  // auto-ack
@@ -43,6 +43,12 @@ func (h *Handler) Handle() {
 		false, // no-wait
 		nil,   // args
 	)
+
+	if err != nil {
+		log.Printf("failed to consume messages: %w\n", err)
+
+		return
+	}
 
 	log.Println("processor started ...")
 

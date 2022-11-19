@@ -6,7 +6,7 @@ mailgun:
   domain: "sandboxa4e21e2439ba4a9cafee0587e3134637.mailgun.org"
 mqtt:
   queue: "ad-reg-queue"
-  uri: "amqps://neowhxae:75RF-ATe2cBWd15zDmGpS3f13TfLu40r@hawk.rmq.cloudamqp.com/neowhxae"
+  uri: "amqps://neowhxae:75RF-ATe2cBWd15zDmGpS3f13TfLu40r@hawk.rmq.cloudamqp.com:5671/neowhxae"
 storage:
   mongodb:
     database: "ad-db"

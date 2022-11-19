@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"time"
@@ -150,7 +151,7 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 
 	// publish id over mqtt
 	err = h.MQTT.Channel.PublishWithContext(
-		ctx.Context(),
+		context.Background(),
 		"",
 		h.MQTT.Queue,
 		false,
