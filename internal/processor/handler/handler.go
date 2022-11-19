@@ -132,7 +132,7 @@ func (h *Handler) Handle() {
 							return
 						}
 
-						log.Printf("email send {id: %s}\n", id)
+						log.Printf("email sent {id: %s}\n", id)
 					}()
 				} else {
 					ad.State = enum.RejectState
