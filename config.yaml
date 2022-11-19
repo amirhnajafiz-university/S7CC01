@@ -1,19 +1,19 @@
 imagga:
-  api_key: ""
-  api_secret: ""
+  api_key: "acc_9f3e3fdc0eaeca3"
+  api_secret: "9a43becd53ccced1e2f16dd4806401ad"
 mailgun:
-  api_key: ""
-  domain: ""
+  api_key: "3bbd406a636a32fb943afa0b8da2184c-38029a9d-49239cf0"
+  domain: "sandboxa4e21e2439ba4a9cafee0587e3134637.mailgun.org"
 mqtt:
   queue: "ad-reg-queue"
-  uri: ""
+  uri: "amqps://neowhxae:75RF-ATe2cBWd15zDmGpS3f13TfLu40r@hawk.rmq.cloudamqp.com/neowhxae"
 storage:
   mongodb:
-    database: "ad-reg"
-    uri: ""
+    database: "ad-db"
+    uri: "mongodb+srv://m001-student:my-superpass2@amirh.aoxrj.mongodb.net/?retryWrites=true&w=majority"
   s3:
-    accessKeyID: ""
-    secretAccessKey: ""
-    region: ""
+    accessKeyID: "c4af0564-e32f-4a10-9925-f2157f51d7b9"
+    secretAccessKey: "f0a091b2eadcccbb329ad782fd754eeba2c36398db8a970e8cb0e070d7e745b6"
+    region: "default"
     bucket: "ad-reg-bucket"
-    endpoint: ""
+    endpoint: "https://s3.ir-thr-at1.arvanstorage.com"

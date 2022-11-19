@@ -111,6 +111,8 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
+	log.Println("user request accepted")
+
 	// creating a new uploader
 	uploader := s3manager.NewUploader(h.S3.Session)
 	// upload image into s3 database
@@ -125,6 +127,8 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
+	log.Println("image uploaded to s3")
+
 	// filling the ad model
 	ad := model.Ad{
 		Id:          uid,
@@ -137,8 +141,12 @@ func (h *Handler) HandlePostRequests(ctx *fiber.Ctx) error {
 
 	// insert ad into mongodb
 	if _, err = c.InsertOne(ctx.Context(), ad, nil); err != nil {
+		log.Println(err)
+
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
+
+	log.Println("store into mongodb")
 
 	// publish id over mqtt
 	err = h.MQTT.Channel.PublishWithContext(
