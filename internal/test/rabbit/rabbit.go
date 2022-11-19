@@ -45,7 +45,7 @@ func GetCommand() *cobra.Command {
 	return &cobra.Command{
 		Use: "rabbit",
 		Run: func(_ *cobra.Command, args []string) {
-			main(args[1])
+			main(args[0])
 		},
 	}
 }

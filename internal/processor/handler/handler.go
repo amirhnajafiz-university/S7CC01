@@ -33,6 +33,8 @@ type Handler struct {
 // listens over rabbitMQ and processes
 // the input images.
 func (h *Handler) Handle() {
+	log.Printf("start listening on queue: %s\n", h.MQTT.Queue)
+
 	// creating a consumer for rabbitMQ
 	events, err := h.MQTT.Channel.Consume(
 		h.MQTT.Queue,
@@ -45,7 +47,7 @@ func (h *Handler) Handle() {
 	)
 
 	if err != nil {
-		log.Printf("failed to consume messages: %w\n", err)
+		log.Printf("failed to consume messages: %v\n", err)
 
 		return
 	}
@@ -60,7 +62,7 @@ func (h *Handler) Handle() {
 			// get id from rabbitMQ
 			id = string(event.Body)
 			// mongodb filter
-			filter = bson.M{"id": id}
+			filter = bson.D{{"id", id}}
 			// connecting to mongodb collection
 			c = h.Mongo.Collection(model.AdCollection)
 			// creating a new ad model
@@ -97,7 +99,7 @@ func (h *Handler) Handle() {
 			continue
 		}
 
-		log.Println("s3 link generated")
+		log.Printf("s3 link generated: %s\n", urlStr)
 
 		// image tag
 		resp, err := h.Imagga.Process(urlStr)
@@ -135,8 +137,10 @@ func (h *Handler) Handle() {
 
 		log.Println("imagga api call succeed")
 
+		update := bson.D{{"$set", bson.D{{"state", ad.State}, {"category", ad.Category}}}}
+
 		// update mongodb
-		if _, err := c.UpdateOne(ctx, filter, ad, nil); err != nil {
+		if _, err := c.UpdateOne(ctx, filter, update, nil); err != nil {
 			log.Println(err)
 
 			continue

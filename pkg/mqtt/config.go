@@ -3,6 +3,6 @@ package mqtt
 // Config
 // rabbitMQ config parameters.
 type Config struct {
-	Queue string `koanf:"name"`
+	Queue string `koanf:"queue"`
 	URI   string `koanf:"uri"`
 }

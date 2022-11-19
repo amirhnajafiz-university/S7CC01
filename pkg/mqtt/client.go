@@ -28,7 +28,7 @@ func NewConnection(cfg Config) (*MQTT, error) {
 		return nil, fmt.Errorf("getting rabbitMQ channel failed: %w", err)
 	}
 
-	q, err := mq.Channel.QueueDeclare(
+	_, err = mq.Channel.QueueDeclare(
 		cfg.Queue, // name
 		false,     // durable
 		false,     // delete when unused
@@ -40,7 +40,7 @@ func NewConnection(cfg Config) (*MQTT, error) {
 		return nil, fmt.Errorf("creating queue failed: %w", err)
 	}
 
-	mq.Queue = q.Name
+	mq.Queue = cfg.Queue
 
 	return &mq, nil
 }
