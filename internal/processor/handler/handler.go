@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
+	"time"
 
 	"github.com/ceit-aut/ad-registration-service/pkg/enum"
 	"github.com/ceit-aut/ad-registration-service/pkg/model"
@@ -15,7 +15,6 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	s3sdk "github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -81,43 +80,28 @@ func (h *Handler) Handle() {
 
 		log.Println("mongodb get by id succeed")
 
-		// getting the image from s3 by creating a local file
-		file, err := os.Create(id)
+		// getting the image from s3
+		svc := s3sdk.New(h.S3.Session, &aws.Config{
+			Region:   aws.String(h.S3.Cfg.Region),
+			Endpoint: aws.String(h.S3.Cfg.Endpoint),
+		})
+
+		req, _ := svc.GetObjectRequest(&s3sdk.GetObjectInput{
+			Bucket: aws.String(h.S3.Cfg.Bucket),
+			Key:    aws.String(ad.Id),
+		})
+
+		urlStr, err := req.Presign(15 * time.Minute)
 		if err != nil {
-			log.Printf("cannot create file:\n\t%s\n", id)
+			log.Println(err)
 
 			continue
 		}
 
-		// creating a new downloader
-		downloader := s3manager.NewDownloader(h.S3.Session)
-		bytes, err := downloader.Download(
-			file,
-			&s3sdk.GetObjectInput{
-				Bucket: aws.String(h.S3.Cfg.Bucket),
-				Key:    aws.String(id),
-			},
-		)
-		if err != nil {
-			log.Printf("failed to get file from s3: %v\n", err)
-
-			continue
-		}
-
-		log.Printf("s3 file read:\n\t%d bytes\n", bytes)
-
-		// uploading image to imagga
-		uploadResp, err := h.Imagga.Upload(id)
-		if err != nil {
-			log.Printf("upload file to imagga failed: %v\n", err)
-
-			continue
-		}
-
-		log.Printf("imagga upload file:\n\t%s\n", uploadResp.Status.Type)
+		log.Printf("image url from s3:\n\t%s\n", urlStr)
 
 		// image tag process
-		resp, err := h.Imagga.Process(uploadResp.Result.UploadId)
+		resp, err := h.Imagga.Process(urlStr)
 		if err != nil {
 			log.Println(err)
 
@@ -128,7 +112,7 @@ func (h *Handler) Handle() {
 
 		// response check
 		if len(resp.Result.Tags) > 0 {
-			log.Printf("imagga response confidence: %d\n", resp.Result.Tags[0].Confidence)
+			log.Printf("imagga response confidence: %f\n", resp.Result.Tags[0].Confidence)
 
 			if resp.Result.Tags[0].Confidence == 100 {
 				ad.Category = resp.Result.Tags[0].Tag.En
@@ -174,11 +158,6 @@ func (h *Handler) Handle() {
 			continue
 		}
 
-		// remove the tmp file
-		if er := os.RemoveAll(id); er != nil {
-			log.Printf("failed to remove file: %s\n", er)
-		}
-
-		log.Printf("success processing {id: %s}\n", id)
+		log.Printf("success processing:\n\t{id: %s}\n", id)
 	}
 }
