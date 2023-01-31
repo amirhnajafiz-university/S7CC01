@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ceit-aut/ad-registration-service/pkg/enum"
-	"github.com/ceit-aut/ad-registration-service/pkg/model"
-	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+	"github.com/ceit-aut/S7CC01/pkg/enum"
+	"github.com/ceit-aut/S7CC01/pkg/model"
+	"github.com/ceit-aut/S7CC01/pkg/mqtt"
+	"github.com/ceit-aut/S7CC01/pkg/storage/s3"
 
 	"github.com/aws/aws-sdk-go/aws"
 	s3Sdk "github.com/aws/aws-sdk-go/service/s3"

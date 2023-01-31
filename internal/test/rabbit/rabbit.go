@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/ceit-aut/ad-registration-service/pkg/config"
-	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
+	"github.com/ceit-aut/S7CC01/pkg/config"
+	"github.com/ceit-aut/S7CC01/pkg/mqtt"
 
 	"github.com/rabbitmq/amqp091-go"
 	"github.com/spf13/cobra"

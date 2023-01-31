@@ -1,4 +1,4 @@
-module github.com/ceit-aut/ad-registration-service
+module github.com/ceit-aut/S7CC01
 
 go 1.19
 

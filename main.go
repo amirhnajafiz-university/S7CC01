@@ -1,6 +1,6 @@
 package main
 
-import "github.com/ceit-aut/ad-registration-service/internal/cmd"
+import "github.com/ceit-aut/S7CC01/internal/cmd"
 
 func main() {
 	cmd.Execute()

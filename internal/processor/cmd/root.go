@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"github.com/ceit-aut/ad-registration-service/internal/processor/handler"
-	"github.com/ceit-aut/ad-registration-service/pkg/config"
-	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
-	"github.com/ceit-aut/ad-registration-service/pkg/service/imagga"
-	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+	"github.com/ceit-aut/S7CC01/internal/processor/handler"
+	"github.com/ceit-aut/S7CC01/pkg/config"
+	"github.com/ceit-aut/S7CC01/pkg/mqtt"
+	"github.com/ceit-aut/S7CC01/pkg/service/imagga"
+	"github.com/ceit-aut/S7CC01/pkg/service/mail"
+	"github.com/ceit-aut/S7CC01/pkg/storage/mongodb"
+	"github.com/ceit-aut/S7CC01/pkg/storage/s3"
 
 	"github.com/spf13/cobra"
 )

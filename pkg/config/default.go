@@ -1,12 +1,12 @@
 package config
 
 import (
-	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
-	"github.com/ceit-aut/ad-registration-service/pkg/service/imagga"
-	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+	"github.com/ceit-aut/S7CC01/pkg/mqtt"
+	"github.com/ceit-aut/S7CC01/pkg/service/imagga"
+	"github.com/ceit-aut/S7CC01/pkg/service/mail"
+	"github.com/ceit-aut/S7CC01/pkg/storage"
+	"github.com/ceit-aut/S7CC01/pkg/storage/mongodb"
+	"github.com/ceit-aut/S7CC01/pkg/storage/s3"
 )
 
 // Default

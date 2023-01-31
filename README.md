@@ -1,6 +1,8 @@
 <h1 align="center">
-Ad Registration Service
+    S7CC01
 </h1>
+
+<br />
 
 Cloud computing first project/homework. In this project we are going to create a **Ad Registration Service**. We are building two Backend services for getting user information and processing the next steps.
 

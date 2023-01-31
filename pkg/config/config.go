@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ceit-aut/ad-registration-service/pkg/mqtt"
-	"github.com/ceit-aut/ad-registration-service/pkg/service/imagga"
-	"github.com/ceit-aut/ad-registration-service/pkg/service/mail"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage"
+	"github.com/ceit-aut/S7CC01/pkg/mqtt"
+	"github.com/ceit-aut/S7CC01/pkg/service/imagga"
+	"github.com/ceit-aut/S7CC01/pkg/service/mail"
+	"github.com/ceit-aut/S7CC01/pkg/storage"
 
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"

@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/ceit-aut/ad-registration-service/internal/test/rabbit"
+	"github.com/ceit-aut/S7CC01/internal/test/rabbit"
 
 	"github.com/spf13/cobra"
 )

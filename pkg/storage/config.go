@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/mongodb"
-	"github.com/ceit-aut/ad-registration-service/pkg/storage/s3"
+	"github.com/ceit-aut/S7CC01/pkg/storage/mongodb"
+	"github.com/ceit-aut/S7CC01/pkg/storage/s3"
 )
 
 // Config
